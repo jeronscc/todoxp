@@ -6,7 +6,7 @@ export const getUsers = async (req, res) => {
       const users = await User.find({});
       res.status(200).json({ success: true, data: users });
     } catch (error) {
-      console.log("Error in fetching products:", error.message);
+      console.log("Error in fetching users:", error.message);
       res.status(500).json({ success: false, message: "Server Error"});
     }
   };
@@ -49,11 +49,15 @@ export const updateUser = async (req, res) => {
 export const deleteUser = async (req, res) => {
     const {id} = req.params;
   
+    if(!mongoose.Types.ObjectId.isValid(id)){
+      return res.status(400).json({ success: false, message: "Invalid user id"});
+    }
+
     try {
       await User.findByIdAndDelete(id);
-      res.status(200).json({ success: true, message: "Product deleted"});
+      res.status(200).json({ success: true, message: "User deleted"});
     } catch(error) {
-      console.log("Error in deleting product:", error.message);
-      res.status(404).json({ success: false, message: "Product not found"});
+      console.log("Error in deleting user:", error.message);
+      res.status(500).json({ success: false, message: "Server Error"});
     }
   }
